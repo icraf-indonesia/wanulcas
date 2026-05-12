@@ -3,52 +3,52 @@
 
 # setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 
-install_load <- function (package1, ...)  {
+#install_load <- function (package1, ...)  {
   # convert arguments to vector
-  packages <- c(package1, ...)
+#  packages <- c(package1, ...)
   # start loop to determine if each package is installed
-  instp <- rownames(installed.packages())
-  for (package in packages) {
-    if (!package %in% instp) {
-      install.packages(package, repos = "http://cran.us.r-project.org", dependencies = T)
-    }
-  }
-}
+#  instp <- rownames(installed.packages())
+#  for (package in packages) {
+#    if (!package %in% instp) {
+#      install.packages(package, repos = "http://cran.us.r-project.org", dependencies = T)
+#    }
+#  }
+#}
 
-libs <- c(
-  "shiny",
-  "bslib",
-  "bsicons",
-  "htmltools",
-  "plotly",
+#libs <- c(
+#  "shiny",
+#  "bslib",
+#  "bsicons",
+#  "htmltools",
+#  "plotly",
   # "shinyalert",
   # "shinyWidgets",
   
-  "reactable",
-  "reactable.extras",
-  "reactablefmtr",
-  "excelR",
+#  "reactable",
+#  "reactable.extras",
+#  "reactablefmtr",
+#  "excelR",
   
-  "RColorBrewer",
-  "paletteer",
+#  "RColorBrewer",
+#  "paletteer",
   
-  "yaml",
-  "zip",
-  "openxlsx2",
-  "progress",
-  "data.table",
-  "lubridate",
+#  "yaml",
+#  "zip",
+#  "openxlsx2",
+#  "progress",
+#  "data.table",
+#  "lubridate",
   # "config",
   # "shinyjs",
   
   # "future",
-  "ipc",
+ # "ipc",
   # "promises"
-  "mirai"
-)
+#  "mirai"
+#)
 
 
-install_load(libs)
+#install_load(libs)
 
 library("shiny")
 library("bslib")
