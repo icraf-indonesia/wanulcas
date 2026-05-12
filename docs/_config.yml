@@ -1,0 +1,50 @@
+title: WaNuLCAS 5
+author:
+  name: World Agroforestry (ICRAF)
+  
+description: >
+  WaNuLCAS is a software for simulating Water, Nutrient, and Light Capture in Agricultural Systems
+theme: minima
+
+sass:
+  quiet_deps: true
+  silence_deprecations: [import]
+
+minima:
+  skin: classic
+
+  # Specific pages for site navigation.
+  #   If you wish to link only specific pages in the site-navigation, use this and list
+  #   the `path` property (as represented via Liquid) of the pages in the order they
+  #   should be rendered.
+  nav_pages:
+    - about.md
+    - manual.md
+    - background.md
+    - overview.md
+    - references.md
+    - appendix/index.md
+    
+  # Set to `true` to show excerpts on the homepage.
+  show_excerpts: false
+
+  # Minima date format.
+  #   The default value is "%b %d, %Y" (e.g. Nov 14, 2023).
+  #   Refer to https://shopify.github.io/liquid/filters/date/ for valid values.
+  # date_format: "%b-%d-%Y"
+
+  # Social Media Links
+  #   Renders icons via Font Awesome Free webfonts CDN, based on ordered list of entries.
+  #   Entry keys:
+  #     * title    Tooltip rendered on hovering over icon.
+  #     * icon     Font Awesome icon id. `github` corresponds to `fa-github`.
+  #     * url      Full URL of social profile.
+  social_links:
+    - title: WaNuLCAS repository at GitHub
+      icon: github
+      url: "https://github.com/degi/wanulcas"
+      
+  hide_site_feed_link: true 
+  
+  google_analytics: G-WKBML4VGSY
+  
