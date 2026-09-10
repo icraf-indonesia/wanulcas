@@ -19,12 +19,12 @@ To run the application locally without cloning the repository, open your R conso
 if (!require("shiny")) install.packages("shiny")
 
 # Run the application from the GitHub repository
-shiny::runGitHub("wanulcas", "talas-tools")
+shiny::runGitHub("wanulcas", "icraf-indonesia")
 ```
 
 ### 3. Run Locally (Clone/Download)
 If you prefer to have the source code on your machine:
-1. Clone the repository: `git clone https://github.com/degi/wanulcas.git`
+1. Clone the repository: `git clone https://github.com/icraf-indonesia/wanulcas.git`
 2. Open the project in RStudio or set your working directory to the downloaded folder.
 3. Open `app.R` (or `ui.R`/`server.R`) and click **Run App** in RStudio, or run `shiny::runApp()` in your R console.
 
@@ -32,9 +32,10 @@ If you prefer to have the source code on your machine:
 User manual and model documentation are available at: https://talas-tools.github.io/wanulcas/ 
 
 WaNuLCAS simulates the balance of water, nutrients, and light capture in agroforestry systems dynamically over time. The application is divided into several main sections accessible via the navigation bar:
-- **Home**: Main landing page
-- **Input Parameters**: Define the characteristics of your system (Soil, Climate, Plants, etc.)
-- **Simulation**: Run scenarios and analyze outcomes
+- **Home**: Main landing page and quick navigation
+- **Core Parameters**: Essential model inputs (tree, crop, climate, soil), mandatory to be filled 
+- **Additional Parameters**: Advanced inputs (management, economics, SOM, slash & burn, etc.)
+- **Simulation**: Run scenarios and analyze results
 - **About**: View tutorials, libraries, and references
+- **Options**: Upload/download input parameter, download the parameter template & descriptions
 
-![Home page](./docs/manual_images/home.png)

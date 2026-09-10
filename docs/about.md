@@ -3,15 +3,16 @@ layout: base
 title: About
 permalink: /about/
 ---
-Last Update: March 16, 2026
+Last Update: June 6, 2026
 
 <img src="https://raw.githubusercontent.com/degi/wanulcas/refs/heads/main/www/images/wanulcas_diagram.png" height="200" alt="WaNuLCAS Logo"/>
 
-WaNuLCAS-5 is a free, open-source web application. The **source code** is available at [https://github.com/degi/wanulcas](https://github.com/degi/wanulcas), and the **online version** can be accessed at [https://wanulcas.agroforestri.id/](https://wanulcas.agroforestri.id/). The application was developed using R and JavaScript on the [R-Shiny](https://shiny.posit.co/) platform. It can be launched locally as a standalone application from its source code using [R](https://www.r-project.org/) or [RStudio](https://posit.co/products/open-source/rstudio/) (go to the [source code website](https://github.com/degi/wanulcas) and follow the instructions).
+WaNuLCAS-5 is a free, open-source web application. The **source code** is available at [https://github.com/icraf-indonesia/wanulcas](https://github.com/icraf-indonesia/wanulcas), and the **online version** can be accessed at [https://wanulcas.agroforestri.id/](https://wanulcas.agroforestri.id/). The application was developed using R and JavaScript on the [R-Shiny](https://shiny.posit.co/) platform. It can be launched locally as a standalone application from its source code using [R](https://www.r-project.org/) or [RStudio](https://posit.co/products/open-source/rstudio/) (go to the [source code website](https://github.com/icraf-indonesia/wanulcas) and follow the instructions).
 
 WaNuLCAS-5 is an updated version of the original [WaNuLCAS version 4](https://www.worldagroforestry.org/output/wanulcas) developed by World Agroforestry (ICRAF). The previous iteration, WaNuLCAS v4, was implemented using [ISEE Stella](https://www.iseesystems.com/) and MS Excel macro scripts. WaNuLCAS-5 utilizes algorithms similar to those in WaNuLCAS v4 for its core modules and adopts corresponding variable names in its source code.
 
-- **Application Author and Maintainer**: Degi Harja Asmara
+- **Application Authors**: Degi Harja Asmara and Hasna Afifah
+- **Application Maintainers**: Hasna Afifah and Ni’matul Khasanah
 - **Model Authors**: Meine van Noordwijk, Betha Lusiana, Ni’matul Khasanah, Rachmat Mulia
 
 *Suggested citation for the original model*:

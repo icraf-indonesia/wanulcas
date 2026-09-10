@@ -236,11 +236,11 @@ After completing the model conversion, the next phase is validating the script l
 
 The source code of the WaNuLCAS app is available on GitHub:
 
-[https://github.com/degi/wanulcas](https://github.com/degi/wanulcas)
+[https://github.com/icraf-indonesia/wanulcas](https://github.com/icraf-indonesia/wanulcas)
 
 The WaNuLCAS core programs are located in the R subfolder:
 
-[https://github.com/degi/wanulcas/tree/main/R](https://github.com/degi/wanulcas/tree/main/R)
+[https://github.com/icraf-indonesia/wanulcas/tree/main/R](https://github.com/icraf-indonesia/wanulcas/tree/main/R)
 
 The core programs can be downloaded independently and run in either R or RStudio. The execution script is located in the **run_wanulcas.R** file, using the following syntax:
 
@@ -293,30 +293,7 @@ The simulation results will be returned as a List object within the "output" var
 
 The core module files can be found at the link below:
 
-[https://github.com/degi/wanulcas/tree/main/R](https://github.com/degi/wanulcas/tree/main/R)
-
-## WaNuLCAS R-Shiny GUI
-
-An R-Shiny GUI prototype has been developed and deployed on a temporary host at [https://www.shinyapps.io](https://www.shinyapps.io/). The web address for the application is [https://degi.shinyapps.io/wanulcas](https://degi.shinyapps.io/wanulcas/). This temporary hosting environment is strictly intended for the development and testing phases. Upon passing all necessary tests, the final application will be deployed to the primary host at [https://agroforestri.id](https://agroforestri.id/).
-
-Screenshots illustrating the WaNuLCAS Shiny app are presented in Figure 6 through Figure 8. The application's interface is divided into tabulated windows. Model parameterization can be achieved either manually through the GUI or by importing a pre-defined parameters file in YAML format.
-
-![Homepage of the WaNuLCAS 5.0 R-Shiny application](./media/notes_image9.png)
-
-Figure 6. The homepage of the WaNuLCAS 5.0 R-Shiny application.
-
-![GUI for input parameters in the WaNuLCAS Shiny app](./media/notes_image10.png)
-
-Figure 7. The GUI for input parameters.
-
-![Input parameters displayed in nested tabular windows](./media/notes_image11.png)
-
-Figure 8. Input parameters are divided into nested sections and displayed
-in tabular windows.
-
-The source code of the application can be found here:
-
-[https://github.com/degi/wanulcas](https://github.com/degi/wanulcas)
+[https://github.com/icraf-indonesia/wanulcas/tree/main/R](https://github.com/icraf-indonesia/wanulcas/tree/main/R)
 
 ## Parameter Input File
 
