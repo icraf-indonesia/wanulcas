@@ -4,376 +4,519 @@ title: User Manual
 permalink: /manual/
 ---
 
-Welcome to the WaNuLCAS 5.0 User Manual. This web application provides a comprehensive interface for simulating agroforestry scenarios.
+# WaNuLCAS 5.0 — User Manual
 
-## 1. Running the Application
+**Water, Nutrient and Light Capture in Agroforestry Systems**
 
-There are several ways to access and run the WaNuLCAS Shiny application:
+Version 5.0 Web Application
 
-### 1.1. Online Access (Easiest)
-You can directly access the application online without any installation at:
-[https://wanulcas.agroforestri.id/](https://wanulcas.agroforestri.id/)
+Authors: Meine van Noordwijk, Betha Lusiana, Ni'matul Khasanah, Rachmat Mulia, Hasna Afifah, Degi Harja Asmara
 
-### 1.2. Run Directly from GitHub
-To run the application locally without cloning the repository, open your R console or RStudio and run:
+---
 
+## Table of Contents
+
+1. [Getting Started](#1-getting-started)
+2. [Home Page](#2-home-page)
+3. [Core Parameters](#3-core-parameters)
+4. [Additional Parameters](#4-additional-parameters)
+5. [Simulation](#5-simulation)
+6. [Output & Results](#6-output--results)
+7. [Options](#7-options)
+8. [Frequently Asked Questions](#8-frequently-asked-questions)
+---
+## 1. Getting Started
+
+WaNuLCAS simulates the balance of water, nutrients, and light capture in agroforestry systems dynamically over time. The web application provides an interactive interface to configure, run, and visualize simulations.
+
+Before proceeding with this User Manual, please ensure you have read the **Overview** chapter to understand the model configuration. The Overview chapter explains the scientific foundations of the model, including its key features (water, nitrogen, and phosphorus uptake based on root length densities), the 4-zone × 4-layer spatial design, the calendar of events, and the underlying modules for soil processes, light competition, crop/tree growth, and economic analysis. Understanding these concepts will help you make informed choices when setting up your simulation parameters.
+
+The input and output parameters in this web application are largely represented by acronyms. To see the detailed description of each parameter, the full parameter description documents are available for download from the **Options** tab (both input and output parameter descriptions are provided as PDF files).
+
+### 1.1 Accessing the Application
+
+**Online (easiest):** Open [https://wanulcas.agroforestri.id/](https://wanulcas.agroforestri.id/) in your browser (Chrome, Firefox, or Edge recommended).
+
+**Run from GitHub:**
 ```r
-# Install shiny if you haven't already
 if (!require("shiny")) install.packages("shiny")
-
-# Run the application from the GitHub repository
-shiny::runGitHub("wanulcas", "talas-tools")
+shiny::runGitHub("wanulcas", "icraf-indonesia")
 ```
 
-### 1.3. Run Locally (Clone/Download)
-If you prefer to have the source code on your machine:
-1. Clone the repository: `git clone https://github.com/degi/wanulcas.git`
-2. Open the project in RStudio or set your working directory to the downloaded folder.
-3. Open `app.R` (or `ui.R`/`server.R`) and click **Run App** in RStudio, or run `shiny::runApp()` in your R console.
+**Run locally:**
+1. Clone: `git clone https://github.com/icraf-indonesia/wanulcas.git`
+2. Open in RStudio and click **Run App**, or run `shiny::runApp()`.
 
-## 2. Introduction
-WaNuLCAS simulates the balance of water, nutrients, and light capture in agroforestry systems dynamically over time. The application is divided into several main sections accessible via the navigation bar:
-- **Home**: Main landing page
-- **Input Parameters**: Define the characteristics of your system (Soil, Climate, Plants, etc.)
-- **Simulation**: Run scenarios and analyze outcomes
-- **About**: View tutorials, libraries, and references
+### 1.2 Navigation
+
+The application has five main tabs at the top:
+
+| Tab | Purpose |
+|-----|---------|
+| **Home** | Overview and quick navigation |
+| **Core Parameters** | Essential model inputs (tree, crop, climate, soil), mandatory to be filled |
+| **Additional Parameters** | Advanced settings (management, economics, SOM, slash & burn, etc.) |
+| **Simulation** | Run the model and view results |
+| **Options** | Upload/download input parameter, download the parameter template & descriptions |
+
+### 1.3 Three Ways to Use the Model
+
+There are three ways to input data into WaNuLCAS. Regardless of which method you choose, the last change you make in this web app is always the one that will be used — if you upload from Excel and then modify a value on the website, the website value takes precedence.
+
+**Method 1: Direct input through the application (recommended for new users)**
+
+Enter all parameters manually in the app. The input tables throughout the application support copy-paste from Excel — select a block in your spreadsheet, copy (Ctrl+C), click the first cell in the web table, and paste (Ctrl+V). This method gives you full control and immediate visual feedback on every parameter.
+
+**Method 2: Import from Excel (most recommended, especially for existing WaNuLCAS users)**
+
+If you have used WaNuLCAS before (the STELLA version) or prefer working in Excel, download the blank template from **Options > Download xlsm template**, fill it in offline, and upload it via **Options > Upload xlsm file**. If you already have a `Wanulcas.xlsm` file from a previous study, you can upload it directly without starting from the blank template. All Core Parameters will be loaded automatically. If you need to set Additional Parameters (which were previously part of the STELLA interface), you can configure those directly in the app after uploading the Excel file.
+
+Please note that any changes you make on the website after uploading will override the data from your Excel file. For example, if you use the Pedotransfer or Phosphorus calculators after uploading, the computed values will replace the corresponding Excel values — even though the input tables may still display the original Excel numbers, the engine will use the most recently applied values.
+
+**Method 3: Import from YAML (least recommended)**
+
+You can also import parameters from a `.yaml` file (available via **Options > Download and save parameters**). This is primarily useful for saving and restoring a specific configuration you have previously set up in the app, rather than for initial data entry.
+
+---
+
+## 2. Home Page
 
 Figure 2.1: Home page
 ![Home page](./manual_images/home.png)
-*Provides a simple and welcoming entry to the WaNuLCAS application. From here, you can use the navigation bar to configure parameters, run simulations, or find out more information.*
 
-## 3. Input Parameters
+The Home page provides quick-access buttons:
 
-The **Input Parameters** section is where you specify all the necessary conditions for your simulation. Parameters are logically grouped into categories:
+- **Run & Output** — Jump directly to the Simulation page
+- **Input Section** — Reveals the module navigation cards below
+- **About the Model** — Background information
+- **Tutorial** — Learning resources and details on how to use the application
 
-### 3.1. Agroforestry System
-    
-Figure 3.1: Agroforestry design
-![Agroforestry design](./manual_images/agroforestry_design.png)
-*This subpanel allows you to configure essential design features of the agroforestry plot such as tree spacing, zone allocation, and whether to include trees (`AF_AnyTrees?`), crops (`AF_AnyCrops?`), or weeds (`AF_SimulateWeeds?`). As noted in WaNuLCAS 4.0, the simulation relies on a 4-zone basic design (Zone 1 to 4) originating from the tree line, which allows the model to calculate the spatial distribution of light, water, and nutrient competition between tree and crop root systems over radial distance.*
+Figure 2.2: Home page with module cards
+![Home page modules](./manual_images/home_modules.png)
 
-- **Crop, Tree, and Oil Palm**, and **Weed** parameters have interactive libraries.
+Clicking **Input Section** reveals cards for each parameter group (Tree, Crop, Agroforestry System, Climate, Soil). Click any card to jump to that section.
 
-Figure 3.2: Crop selection
+---
+
+## 3. Core Parameters
+
+Core Parameters are **mandatory** — every part of Core Parameters must be filled in for WaNuLCAS to be able to run a simulation. This section covers the essential inputs: species selection, agroforestry layout, climate, and soil.
+
+### 3.1 Tree Parameters
+
+#### Tree Management (Species Selection & Planting)
+
+Select up to 3 tree species from the dropdown menus at the top. Species data is loaded from a built-in library of 39 species (including oil palm variants, rubber, cacao, and many others).
+
+Figure 3.1: Tree species selection and planting schedule
+![Tree management](./manual_images/tree_management.png)
+
+Below the species selection, the **Tree Planting Schedule** table lets you set the planting year and day-of-year for each species. This is a paste-capable table — you can copy rows from Excel, click the first cell, and paste.
+
+At the bottom of this page, there is a **"Go to Pruning Event"** button that takes you directly to the pruning settings in Additional Parameters.
+
+#### Tree Library
+
+Figure 3.2: Tree library
+![Tree library](./manual_images/tree_library.png)
+
+The Tree Library displays all available tree species parameters in an editable table. Rows represent parameters (grouped by category such as Growth, Allometry, Phenology, etc.), and columns represent species. Fields include light capture indicators (`T_SLA`, `T_LWR`) used to calculate the Tree Leaf Area Index, and rooting strategies (`Rt_ATType`) that dictate how tree root length density is distributed across soil profiles. You can browse and edit values directly, select a species as a base, or add/remove custom species.
+
+If you need to parameterize a new species from an existing one, you can add a new tree using an existing species as a base and then edit the parameter values manually. You can name the new species, and after you confirm, it will become available in the Tree Species Selection dropdowns on the Tree Management page — you will need to select it there manually to use it in the simulation.
+
+#### Oil Palm Library
+
+Figure 3.3: Oil Palm library
+![Oil Palm library](./manual_images/oilpalm_library.png)
+
+This section provides additional parameterization if you are modelling oil palm. Each TF (tree fruit) property has its own fruit bunch stages, and values are filled per tree.
+
+For parameters that vary by fruit bunch stage (like `TF_FemSinkperFruit`, `TF_MaleSinkperBunch`), the table shows two row labels — **Property** and **Fruitbunch** (e.g., Ripe, Ripe_1, Anthesis) — with Tree columns for each.
+
+---
+
+### 3.2 Crop Parameters
+
+#### Crop Management
+
+Figure 3.4: Crop species selection and planting schedule
 ![Crop select](./manual_images/crop_select.png)
-*Choose at most 5 predefined options or custom species from this list to simulate multi-species cropping structures. The selected crop type (`Ca_CType[Zone]`) will determine physiological parameters linked to the model.*
 
-Figure 3.3: Crop parameters
-![Crop parameters](./manual_images/crop_parameters.png)
-*Within the species parameter panel, users can examine and edit physiological properties specific to the crop, including structural characteristics across growth stages. For instance, Specific Leaf Area (`Cq_SLA`, in m² g⁻¹) translates leaf biomass into canopy leaf area to calculate light interception. The Leaf Weight Ratio (`Cq_LWR`) determines the fraction of dry matter allocated to leaves, while canopy limits (`C_CanUp`, `C_CanLow`) define the vertical space occupied by the crop to simulate shading effects.*
+Select up to 5 crop types from the dropdown menus. The selected crop type determines the crop stage, physiological parameters, and other properties (explained in the Crop Library) linked to the model.
 
-Figure 3.4: Tree parameters
-![Tree parameters](./manual_images/tree_parameters.png)
-*Similarly to crop parameters, define biological tree properties for up to 3 different tree types simultaneously. Fields include light capture indicators (`T_SLA`, `T_LWR`) used to calculate the Tree Leaf Area Index. You can also define rooting strategies (`Rt_ATType`) to dictate how tree root length density is distributed across soil profiles over time, influencing spatial competition for water (`TW_Uptake`) and nutrients (`TN_Uptake`).*
+The **Crop Planting Schedule** combines three pieces of information per zone in one table. There are four zones, and each column is labelled accordingly:
 
-Figure 3.5: Oil Palm parameters
-![Oil Palm parameters](./manual_images/oilpalm_parameters.png)
-*Specific parameters required for oil palm simulations, enabling the modeling of oil palm growth, fruit biomass, and yield.*
+| Planting Event | PlantY Z1 | PlantDoY Z1 | CQ CropType Z1 | PlantY Z2 | ... |
+|---|---|---|---|---|---|
 
-- You can **Add** or **Remove** species directly within the library subpanels prior to simulating.
+`PlantY Z1` is the year you planted in Zone 1, `PlantDoY Z1` is the day of year for planting in Zone 1, and `CQ CropType Z1` sets which crop species (by number, referencing your selected crop list) is planted in Zone 1 for each planting event. The same pattern repeats for Zones 2, 3, and 4.
 
-Figure 3.6: Adding a new crop
-![Add new crop](./manual_images/crop_add_new.png)
-*Expand the provided datasets by defining completely new crop types. Fill out all required fields like physiology, biophysics, and parameters to incorporate it into your simulation library for crop intercropping interactions beyond the basic predefined 5 crop types.*
+#### Crop Library
 
-Figure 3.7: Editing a crop
-![Edit crop](./manual_images/crop_edit.png)
-*This is the interactive UI for editing crop species parameters. By clicking directly on the cells within this table, you can modify numerical values representing various physiological and morphological traits (e.g., specific leaf area, harvest index) directly in the database, allowing you to fine-tune the growth and responses of the crop in the simulation.*
+Figure 3.5: Crop library
+![Crop library](./manual_images/crop_library.png)
 
-Figure 3.8: Light Capture
+Browse and edit crop-specific parameters. You can also add or remove species directly within the library.
 
-Light capture is calculated on the basis of the leaf area index of the tree(s) and crop (T_LAI\[tree\] and C_LAI) for each zone, and their relative heights. In each zone the parameters T_CanLow\[tree\], T_CanUp\[tree\], C_CanLow, C_CanUp indicate lower and upper boundaries of crop and tree canopy, respectively. LAI is assumed to be homogeneously distributed between these boundaries.
-![Light capture](./manual_images/light_capture.png)
-*Adjust light capture interactions between different system components. You can modify the light extinction coefficients for leaves (`kLLight`) and woody biomass (`kBLight`). In the WaNuLCAS model, these coefficients govern how effectively the plant canopy intercepts incoming solar radiation based on its Leaf Area Index (LAI), directly driving potential transpiration and photosynthesis rates.*
+---
 
-Figure 3.9: Root parasitism
-![Root parasitism](./manual_images/root_parasitism.png)
-*Biological Interactions (Root Parasitism, Pest, Mycorrhiza) - Root parasitism. Configure the extent of biological constraints and interactions. For instance, you can set the fraction of root intersections infected by mycorrhiza (`Rt_MCInfFrac` for crops and `Rt_MTInfFrac` for trees), which in the simulation increases the effective root length for phosphorus uptake by extending the depletion zone. You can also include pests (`PD`) impacting aboveground biomass.*
+### 3.3 Agroforestry System
 
-Figure 3.10: Pest
-![Pest](./manual_images/pest.png)
-*Biological Interactions (Root Parasitism, Pest, Mycorrhiza) - Pest. Configure the extent of biological constraints and interactions. For instance, you can set the fraction of root intersections infected by mycorrhiza (`Rt_MCInfFrac` for crops and `Rt_MTInfFrac` for trees), which in the simulation increases the effective root length for phosphorus uptake by extending the depletion zone. You can also include pests (`PD`) impacting aboveground biomass.*
+#### Agroforestry Design
 
-Figure 3.11: Mycorrhiza
-![Mycorrhiza](./manual_images/mycorrhiza.png)
-*Biological Interactions (Root Parasitism, Pest, Mycorrhiza) - Mycorrhiza. Configure the extent of biological constraints and interactions. For instance, you can set the fraction of root intersections infected by mycorrhiza (`Rt_MCInfFrac` for crops and `Rt_MTInfFrac` for trees), which in the simulation increases the effective root length for phosphorus uptake by extending the depletion zone. You can also include pests (`PD`) impacting aboveground biomass.*
+Figure 3.6: WaNuLCAS zone and layer diagram
+![Agroforestry design](./manual_images/agroforestry_design.png)
 
-### 3.2. Soil
-Set soil depth properties, water retention, organics, surface conditions, roots, etc.
+This page controls the spatial layout of the agroforestry system. At the top, a diagram shows the WaNuLCAS structure:
 
-Figure 3.12: Soil texture
-![Soil texture](./manual_images/soil_texture.png)
-*Soil Texture and Pedotransfer - Soil texture. Set basic soil texture (Sand, Silt, Clay) and Bulk Density for each of the 4 soil layers. The Pedotransfer section automatically calculates parameters of a Van Genuchten equation linking volumetric water content (`W_PhiTheta`) with potential head (`W_Ptheta`) and providing the saturated hydraulic conductivity (`Ksat`), representing how easily water drains out of soil voxels.*
+- **Zones** (1–4) = horizontal divisions of the plot (columns), originating from the tree line. The model calculates the spatial distribution of light, water, and nutrient competition between tree and crop root systems over radial distance.
+- **Soil Layers** (1–4) = vertical divisions of the soil (rows by depth)
+- **Canopy Layers** (1–4) = vertical divisions of the canopy above ground
 
-Figure 3.13: Pedotransfer
-![Pedotransfer](./manual_images/pedotransfer.png)
-*Soil Texture and Pedotransfer - Pedotransfer. Set basic soil texture (Sand, Silt, Clay) and Bulk Density for each of the 4 soil layers. The Pedotransfer section automatically calculates parameters of a Van Genuchten equation linking volumetric water content (`W_PhiTheta`) with potential head (`W_Ptheta`) and providing the saturated hydraulic conductivity (`Ksat`), representing how easily water drains out of soil voxels.*
+The design page also includes:
 
-Figure 3.14: Soil structure
-![Soil structure](./manual_images/soil_structure.png)
-*Soil Structure and Surface - Soil structure. Adjust physical arrangements such as soil structure decay (`S_KStructDecay`). In the simulation, setting this parameter (e.g., to 0.001) governs the rate at which conductivity approaches the default structurally degraded state over time. You can also define surface soil pooling constraints and macroporosity paths recreated by soil fauna.*
+- **Parkland System?** — a switch (1 or 0). If **1**, the system is modelled as a parkland/circular design; if **0**, it is modelled as linear or alley cropping.
+- **Total Zone Width** — the total width of the field being modelled, spread across the 4 zones.
 
-Figure 3.15: Soil surface
-![Soil surface](./manual_images/soil_surface.png)
-*Soil Structure and Surface - Soil surface. Adjust physical arrangements such as soil structure decay (`S_KStructDecay`). In the simulation, setting this parameter (e.g., to 0.001) governs the rate at which conductivity approaches the default structurally degraded state over time. You can also define surface soil pooling constraints and macroporosity paths recreated by soil fauna.*
+Figure 3.7: WaNuLCAS zone depth and layer thickness
+![Zone layer thickness](./manual_images/zone_layer.png)
 
-Figure 3.16: Soil water
-![Soil water](./manual_images/soil_water.png)
-*Soil Water and Evaporation - Soil water. Define the initial soil water content (`W_InitVol`) compared to maximum Field Capacity (`W_FieldCap1`), and adjust potential surface evaporation dynamics.*
+- **Zone Width** — the width of each zone being modelled, spread across the 4 zones.
+- **Soil Layer Thickness** — the depth of each soil layer being modelled, spread across the 4 layer.
 
-Figure 3.17: Soil evaporation
-![Soil evaporation](./manual_images/soil_evaporation.png)
-*Soil Water and Evaporation - Soil evaporation. Define the initial soil water content (`W_InitVol`) compared to maximum Field Capacity (`W_FieldCap1`), and adjust potential surface evaporation dynamics.*
+Figure 3.8: Tree placement and zone configuration
+![Tree placement](./manual_images/zone_tree_placement.png)
 
-Figure 3.18: Soil nutrient
-![Soil nutrient](./manual_images/soil_nutrient.png)
-*Soil Dynamics (Nutrient, Temperature, Erosion) - Soil nutrient. Configure initial nutrient stocks like Nitrogen (`N_Init`) and Phosphorus (`P_Init` derived from `P_Bray`). The model simulates how these stocks mineralize or become adsorbed (governed by adsorption constant `Ka_P`). You also calibrate soil temperature (`S_Temp`) driving decomposition, and erosion limits (`E` module).*
+Below the diagram are tables for tree placement and zone/layer configuration:
 
-Figure 3.19: Soil temperature
-![Soil temperature](./manual_images/soil_temperature.png)
-*Soil Dynamics (Nutrient, Temperature, Erosion) - Soil temperature. Configure initial nutrient stocks like Nitrogen (`N_Init`) and Phosphorus (`P_Init` derived from `P_Bray`). The model simulates how these stocks mineralize or become adsorbed (governed by adsorption constant `Ka_P`). You also calibrate soil temperature (`S_Temp`) driving decomposition, and erosion limits (`E` module).*
+- **Position across zones** — tells which zone each tree occupies.
+- **Position within zone** — a value from 0 (left) to 1 (right), indicating where within its zone the tree is placed.
+- **T_Treesperha** — the number of trees per hectare for each tree species.
+- **Zone widths** and **layer depths** — the width of each of the 4 zones and the thickness of each of the 4 soil layers.
 
-Figure 3.20: Soil erosion
-![Soil erosion](./manual_images/soil_erosion.png)
-*Soil Dynamics (Nutrient, Temperature, Erosion) - Soil erosion. Configure initial nutrient stocks like Nitrogen (`N_Init`) and Phosphorus (`P_Init` derived from `P_Bray`). The model simulates how these stocks mineralize or become adsorbed (governed by adsorption constant `Ka_P`). You also calibrate soil temperature (`S_Temp`) driving decomposition, and erosion limits (`E` module).*
+---
 
-Figure 3.21: Roots
-![Roots](./manual_images/roots.png)
-*Set root length densities (`Lrv`) distribution and dynamics over time across the 4 zones and 4 soil layers for different plant components.*
+### 3.4 Climate
 
-Figure 3.22: SOM
-![SOM](./manual_images/som.png)
-*Soil Organic Matter (SOM) - SOM. Configure Soil Organic Matter using approaches based on the Century model. You can specify SOM by selecting an initialization type (`MC_SOMInitType`, such as ratio of organic to reference C), defining carbon pools for different decomposition timescales (active, slow, passive, structural, metabolic), and fine-tuning continuous or seasonal transfer fractions between these reservoirs during mineralization.*
+In most of this chapter and beyond, you will see inputs presented in a box with **Graph** and **Data** tabs. You can zoom into the graph, edit the underlying data, and immediately see how the graph changes in response.
 
-Figure 3.23: SOM distribution
-![SOM distribution](./manual_images/som_dist.png)
-*Soil Organic Matter (SOM) - SOM distribution. Configure Soil Organic Matter using approaches based on the Century model. You can specify SOM by selecting an initialization type (`MC_SOMInitType`, such as ratio of organic to reference C), defining carbon pools for different decomposition timescales (active, slow, passive, structural, metabolic), and fine-tuning continuous or seasonal transfer fractions between these reservoirs during mineralization.*
+#### Temperature > Air Temperature
 
-Figure 3.24: SOM pools
-![SOM pools](./manual_images/som_pool.png)
-*Soil Organic Matter (SOM) - SOM pools. Configure Soil Organic Matter using approaches based on the Century model. You can specify SOM by selecting an initialization type (`MC_SOMInitType`, such as ratio of organic to reference C), defining carbon pools for different decomposition timescales (active, slow, passive, structural, metabolic), and fine-tuning continuous or seasonal transfer fractions between these reservoirs during mineralization.*
-
-Figure 3.25: SOM transfer
-![SOM transfer](./manual_images/som_transfer.png)
-*Soil Organic Matter (SOM) - SOM transfer. Configure Soil Organic Matter using approaches based on the Century model. You can specify SOM by selecting an initialization type (`MC_SOMInitType`, such as ratio of organic to reference C), defining carbon pools for different decomposition timescales (active, slow, passive, structural, metabolic), and fine-tuning continuous or seasonal transfer fractions between these reservoirs during mineralization.*
-
-Figure 3.26: Decomposition
-![Decomposition](./manual_images/decomposition.png)
-*SOM Processing (Decomposition, Respiration, GHG) - Decomposition. Set rates of organic decomposition, carbon respiration fractions, and greenhouse gas (GHG) emissions (e.g., N2O and CH4 fluxes) from soil organic matter and litter pools.*
-
-Figure 3.27: Respiration
-![Respiration](./manual_images/respiration.png)
-*SOM Processing (Decomposition, Respiration, GHG) - Respiration. Set rates of organic decomposition, carbon respiration fractions, and greenhouse gas (GHG) emissions (e.g., N2O and CH4 fluxes) from soil organic matter and litter pools.*
-
-Figure 3.28: GHG
-![GHG](./manual_images/ghg.png)
-*SOM Processing (Decomposition, Respiration, GHG) - GHG. Set rates of organic decomposition, carbon respiration fractions, and greenhouse gas (GHG) emissions (e.g., N2O and CH4 fluxes) from soil organic matter and litter pools.*
-
-Figure 3.29: Litter pool
-![Litter pool](./manual_images/litter%20pool.png)
-*Litter Pools and Quality - Litter pool. Define properties of accumulated surface litter layers, rates of continuous or seasonal litterfall, and litter quality indicators (decomposition rates) to regulate carbon and nutrient flows.*
-
-Figure 3.30: Litterfall
-![Litterfall](./manual_images/liiterfall.png)
-*Litter Pools and Quality - Litterfall. Define properties of accumulated surface litter layers, rates of continuous or seasonal litterfall, and litter quality indicators (decomposition rates) to regulate carbon and nutrient flows.*
-
-Figure 3.31: Litter quality
-![Litter quality](./manual_images/litter_quality.png)
-*Litter Pools and Quality - Litter quality. Define properties of accumulated surface litter layers, rates of continuous or seasonal litterfall, and litter quality indicators (decomposition rates) to regulate carbon and nutrient flows.*
-
-Figure 3.32: C/N ratio
-![C/N ratio](./manual_images/cn_ratio.png)
-*Elemental Ratios (C/N, N/P) - C/N ratio. Specify nutrient ratios (e.g., C/N and N/P ratios) defining the quality and decomposability of soil and litter organics, which govern nutrient mobilization and immobilization.*
-
-Figure 3.33: N/P ratio
-![N/P ratio](./manual_images/np_ratio.png)
-*Elemental Ratios (C/N, N/P) - N/P ratio. Specify nutrient ratios (e.g., C/N and N/P ratios) defining the quality and decomposability of soil and litter organics, which govern nutrient mobilization and immobilization.*
-
-### 3.3. Climate
-Set daily or monthly variables like rainfall, temperature, and light conditions.
-
-Figure 3.34: Rainfall
-![Rainfall](./manual_images/rainfall.png)
-*Rainfall Parameters - Rainfall. Configure climate input data ranging from periodic to specific daily rainfall inputs (`Rain_Data`). For regions without complete records, use the integrated rainfall simulator based on Markov chains determining conditional probability for rainy days (e.g., `P(W|D)`, `P(W|W)`) paired with distribution models to simulate localized storm intensities and calculate seasonal hydrology patterns (`W_Drain`, percolation).*
-
-Figure 3.35: Rain 1
-![Rain 1](./manual_images/rain_1.png)
-*Rainfall Parameters - Rain 1. Configure climate input data ranging from periodic to specific daily rainfall inputs (`Rain_Data`). For regions without complete records, use the integrated rainfall simulator based on Markov chains determining conditional probability for rainy days (e.g., `P(W|D)`, `P(W|W)`) paired with distribution models to simulate localized storm intensities and calculate seasonal hydrology patterns (`W_Drain`, percolation).*
-
-Figure 3.36: Rain 2
-![Rain 2](./manual_images/rain_2.png)
-*Rainfall Parameters - Rain 2. Configure climate input data ranging from periodic to specific daily rainfall inputs (`Rain_Data`). For regions without complete records, use the integrated rainfall simulator based on Markov chains determining conditional probability for rainy days (e.g., `P(W|D)`, `P(W|W)`) paired with distribution models to simulate localized storm intensities and calculate seasonal hydrology patterns (`W_Drain`, percolation).*
-
-Figure 3.37: Rain 3
-![Rain 3](./manual_images/rain_3.png)
-*Rainfall Parameters - Rain 3. Configure climate input data ranging from periodic to specific daily rainfall inputs (`Rain_Data`). For regions without complete records, use the integrated rainfall simulator based on Markov chains determining conditional probability for rainy days (e.g., `P(W|D)`, `P(W|W)`) paired with distribution models to simulate localized storm intensities and calculate seasonal hydrology patterns (`W_Drain`, percolation).*
-
-Figure 3.38: Rain 4
-![Rain 4](./manual_images/rain_4.png)
-*Rainfall Parameters - Rain 4. Configure climate input data ranging from periodic to specific daily rainfall inputs (`Rain_Data`). For regions without complete records, use the integrated rainfall simulator based on Markov chains determining conditional probability for rainy days (e.g., `P(W|D)`, `P(W|W)`) paired with distribution models to simulate localized storm intensities and calculate seasonal hydrology patterns (`W_Drain`, percolation).*
-
-Figure 3.39: Air Temperature
+Figure 3.9: Air temperature
 ![Air temperature](./manual_images/air_temperature.png)
-*Set average, maximum, and minimum ranges for air temperature (`Temp_DailyData`), which influences potential evaporation (`Temp_DailyPotEvap`) and plant growth.*
 
-### 3.4. Management
+Set crop minimum temperature (`C_TMin`), optimum temperature (`C_TOpt`), and the daily air temperature curve (`TEMP_AirDailyData`) which has 365 data points (one per day), influencing potential evaporation and plant growth.
 
-Apart from yield effects of agroforestry, labour requirements have a strong impact on profitability, and for this one should compare additional labour use (eg. tree pruning) and labour saving aspects (eg. weed control). Complementarity of resource use can be based on a difference in timing of tree and crop resource demand. If the tree picks up the 'left overs' from the cropping period, as occurs with water in the *Grevillea* maize systems in Kenya (Ong; *pers. comm.*) and transforms these resources into valuable products, a considerable degree of competition during the temporal overlap may be acceptable to the farmer. If tree products have no direct value, agroforestry systems may only be justified if F_(noncomp) \> C_(nonrecycl). With increasing direct value of the tree products, the requirements for complementarity decrease.
-Timetables and events including crop planting schedules, slashing & burning tasks, fertilizer inputs, tillage, and harvesting records.
+#### Temperature > Soil Temperature
 
-Figure 3.40: Crop Management
-![Crop management](./manual_images/crop_management.png)
-*Schedule cropping cycles by defining planting years (`Ca_PlantYear[Zone]`) and day of year (`Ca_PlantDoY[Zone]`). The current simulation year is defined as Year 0.*
+Figure 3.10: Soil temperature guided options
+![Soil temperature](./manual_images/soil_temperature.png)
 
-Figure 3.41: Tillage
-![Tillage](./manual_images/tillage.png)
-*Tillage and Grazing - Tillage. Input events and impacts related to mechanical tillage or animal grazing, including stocking rates (`G_StockrateperHa`), animal daily demand (`G_DayDemperDayKg`), and specific standard livestock units (`G_SLU`).*
+A guided sidebar asks: **"What kind of soil temperature data do you have?"**
 
-Figure 3.42: Grazing
-![Grazing](./manual_images/grazing.png)
-*Tillage and Grazing - Grazing. Input events and impacts related to mechanical tillage or animal grazing, including stocking rates (`G_StockrateperHa`), animal daily demand (`G_DayDemperDayKg`), and specific standard livestock units (`G_SLU`).*
+| Option | What to enter | Engine setting |
+|---|---|---|
+| **a. Constant temperature** | A single constant soil temperature (°C) | TEMP_AType = 1 |
+| **b. Monthly average** | Average soil temperature per month (12-point curve) | TEMP_AType = 2 |
+| **c. Daily** | Day-by-day soil temperature values (up to 365 points) | TEMP_AType = 3 |
 
-Figure 3.43: Slashing
-![Slashing](./manual_images/slashing.png)
-*Slashing and Killing Trees - Slashing. Schedule thinning, slashing (`S&B_SlashYear`, `S&B_SlashDOY`), or tree clearing events to manage specific tree components before burning or removal.*
+Each option shows a blue info box describing what to input, followed by the appropriate input field or graph editor. Ensure you choose the option that matches the type of soil temperature data you actually have — the model will calculate using only the data for the option you select. This selection is also updated automatically if you import data from an Excel file.
 
-Figure 3.44: Killing trees
-![Killing trees](./manual_images/killing_trees.png)
-*Slashing and Killing Trees - Killing trees. Schedule thinning, slashing (`S&B_SlashYear`, `S&B_SlashDOY`), or tree clearing events to manage specific tree components before burning or removal.*
+#### Soil Evaporation
 
-Figure 3.45: Slashburn
-![Slashburn](./manual_images/slashburn.png)
-*Slash and Burn Operations - Slashburn. Detail burning operations by applying events (`S&B_BurnYear`, `S&B_BurnDoY`). WaNuLCAS simulates the short- and long-term consequences of fire by translating the fraction of necromass burned (`S&B_NecroBurnFrac`, `S&B_DeadWoodBurnFrac`) into sudden surface temperates, volatilizing nitrogen (`S&B_NvolatFrac`), inducing heat-related mortality of weed seedbanks (`S&B_FirMortSeedBank`), and depositing mobilizing mineral nutrients like P into the topsoil layer.*
+Figure 3.11: Soil evaporation guided options
+![Soil evaporation](./manual_images/soil_evaporation.png)
 
-Figure 3.46: Slashburn 2
-![Slashburn 2](./manual_images/slashburn2.png)
-*Slash and Burn Operations - Slashburn 2. Detail burning operations by applying events (`S&B_BurnYear`, `S&B_BurnDoY`). WaNuLCAS simulates the short- and long-term consequences of fire by translating the fraction of necromass burned (`S&B_NecroBurnFrac`, `S&B_DeadWoodBurnFrac`) into sudden surface temperates, volatilizing nitrogen (`S&B_NvolatFrac`), inducing heat-related mortality of weed seedbanks (`S&B_FirMortSeedBank`), and depositing mobilizing mineral nutrients like P into the topsoil layer.*
+A guided sidebar asks: **"What kind of soil evaporation data do you have?"**
 
-Figure 3.47: Burning time
-![Burning time](./manual_images/burning_time.png)
-*Slash and Burn Operations - Burning time. Detail burning operations by applying events (`S&B_BurnYear`, `S&B_BurnDoY`). WaNuLCAS simulates the short- and long-term consequences of fire by translating the fraction of necromass burned (`S&B_NecroBurnFrac`, `S&B_DeadWoodBurnFrac`) into sudden surface temperates, volatilizing nitrogen (`S&B_NvolatFrac`), inducing heat-related mortality of weed seedbanks (`S&B_FirMortSeedBank`), and depositing mobilizing mineral nutrients like P into the topsoil layer.*
+| Option | Description |
+|---|---|
+| **a. Daily** | Day-by-day potential evaporation data |
+| **b. Constant temperature** | A single constant potential evaporation rate |
+| **c. Monthly average** | Monthly mean evaporation values |
 
-Figure 3.48: Burning impacts
-![Burning impacts](./manual_images/burning_impacts.png)
-*Slash and Burn Operations - Burning impacts. Detail burning operations by applying events (`S&B_BurnYear`, `S&B_BurnDoY`). WaNuLCAS simulates the short- and long-term consequences of fire by translating the fraction of necromass burned (`S&B_NecroBurnFrac`, `S&B_DeadWoodBurnFrac`) into sudden surface temperates, volatilizing nitrogen (`S&B_NvolatFrac`), inducing heat-related mortality of weed seedbanks (`S&B_FirMortSeedBank`), and depositing mobilizing mineral nutrients like P into the topsoil layer.*
+As with Soil Temperature, the model will calculate using only the data for the option you select, so choose the option that matches the data you have.
 
-Figure 3.49: Tree fertilizer
-![Tree fertilizer](./manual_images/tree_fertilizer.png)
-*Nutrients and Fertilizer Inputs - Tree fertilizer. Manage timing (`Ca_FertAppYear`, `Ca_FertAppDOY`) and quantity (`Ca_FertAppRate`) of inorganic fertilizers (`Ca_FertApply?[Nutrient]`) or exogenous organic inputs to specific zones.*
+#### Rainfall
 
-Figure 3.50: Organic input
-![Organic input](./manual_images/organic_input.png)
-*Nutrients and Fertilizer Inputs - Organic input. Manage timing (`Ca_FertAppYear`, `Ca_FertAppDOY`) and quantity (`Ca_FertAppRate`) of inorganic fertilizers (`Ca_FertApply?[Nutrient]`) or exogenous organic inputs to specific zones.*
+Figure 3.12: Rainfall guided options
+![Rainfall](./manual_images/rainfall.png)
 
-Figure 3.51: Timber harvest
-![Timber harvest](./manual_images/timber_harvest.png)
-*Tree Harvesting and Pruning - Timber harvest. Specify harvest strategies for timber (`T_WoodHarvY`), specific tree products, fruit, latex, and routine tree pruning schedules (`T_PrunY`, `T_PrunDoY`), including the fraction of biomass pruned (`T_PrunFracD`) and harvested.*
+A guided sidebar asks: **"What kind of rainfall data do you have?"** For regions without complete records, the integrated rainfall simulator uses Markov chains determining conditional probability for rainy days (e.g., `P(W|D)`, `P(W|W)`) paired with distribution models to simulate localized storm intensities. As with the other guided pages, the model will calculate using only the data for the option you select.
 
-Figure 3.52: Tree product
-![Tree product](./manual_images/tree_product.png)
-*Tree Harvesting and Pruning - Tree product. Specify harvest strategies for timber (`T_WoodHarvY`), specific tree products, fruit, latex, and routine tree pruning schedules (`T_PrunY`, `T_PrunDoY`), including the fraction of biomass pruned (`T_PrunFracD`) and harvested.*
+| Option | Description | RAIN_AType |
+|---|---|---|
+| **a. Simulated monthly** | Stochastic daily rain from monthly stats | 1 |
+| **b. Monthly average** | Average monthly rainfall directly | 2 |
+| **c. Random generator** | Random rain using statistical parameters | 3 |
+| **d. Daily rainfall data** | Actual daily values (365 points) | 4 |
 
-Figure 3.53: Fruit harvest
-![Fruit harvest](./manual_images/fruit_harvest.png)
-*Tree Harvesting and Pruning - Fruit harvest. Specify harvest strategies for timber (`T_WoodHarvY`), specific tree products, fruit, latex, and routine tree pruning schedules (`T_PrunY`, `T_PrunDoY`), including the fraction of biomass pruned (`T_PrunFracD`) and harvested.*
+#### Irrigation
 
-Figure 3.54: Latex
-![Latex](./manual_images/latex.png)
-*Tree Harvesting and Pruning - Latex. Specify harvest strategies for timber (`T_WoodHarvY`), specific tree products, fruit, latex, and routine tree pruning schedules (`T_PrunY`, `T_PrunDoY`), including the fraction of biomass pruned (`T_PrunFracD`) and harvested.*
+Figure 3.13: Irrigation
+![Irrigation](./manual_images/irrigation.png)
 
-Figure 3.55: Pruning
-![Pruning](./manual_images/prunning.png)
-*Tree Harvesting and Pruning - Pruning. Specify harvest strategies for timber (`T_WoodHarvY`), specific tree products, fruit, latex, and routine tree pruning schedules (`T_PrunY`, `T_PrunDoY`), including the fraction of biomass pruned (`T_PrunFracD`) and harvested.*
+Set irrigation schedule and amounts (if applicable).
 
-### 3.5. Economy
-Parameters to estimate the system's economic values such as costs and labor.
+---
 
-Figure 3.56: Profitability
+### 3.5 Soil
+
+#### Soil Nutrient > Nitrogen
+
+Figure 3.14: Nitrogen parameters (Layer × Zone matrix)
+![Nitrogen](./manual_images/nitrogen.png)
+
+Configure initial Nitrogen stocks (`N_Init`) for each soil layer and zone. Tables display values with **4 decimal places** (other tabs use 2) because nitrogen parameters require higher precision.
+
+#### Soil Nutrient > Phosphorus (Calculator)
+
+Figure 3.15: Phosphorus sorption calculator
+![Phosphorus](./manual_images/phosphorus.png)
+
+Skip this page if you already set your phosphorus data in the Excel file. Bulk density and other parameters on this page are pre-filled from your uploaded soil (Excel) data until you change them here — once you click **"Compute & Apply"**, the computed values will override the data from your Excel input.
+
+The **Phosphorus Sorption Calculator** computes phosphorus availability parameters from P-Bray measurements:
+
+- A **4×4 paste-capable P-Bray table** (rows = Layers, columns = Zones)
+- Per-layer soil type selection (from 13 Indonesian soil types or custom)
+- Per-layer bulk density inputs
+
+Clicking **"Compute & Apply"** calculates `N_PStParam` (16 values), `PStMin`, and `PStMax`, and writes them into the model. The model simulates how nutrient stocks mineralize or become adsorbed (governed by the Langmuir sorption isotherm).
+
+Figure 3.16: Phosphorus results
+![Phosphorus results](./manual_images/phosphorus_results.png)
+
+#### Soil Water > Pedotransfer (Calculator)
+
+Figure 3.17: Pedotransfer calculator input table
+![Pedotransfer](./manual_images/pedotransfer.png)
+
+Just like the Phosphorus Calculator, the Pedotransfer input data is auto-filled from your uploaded Excel data until you click **"Compute & Apply"** here — once you do, the computed values will override the data from your Excel input.
+
+The **Pedotransfer Calculator** computes soil hydraulic parameters (van Genuchten equation linking volumetric water content with potential head, and saturated hydraulic conductivity) from soil texture data. It features a **paste-capable input table** with 4 rows (one per soil layer) and 8 columns:
+
+| Column | Description |
+|---|---|
+| Clay % | Clay fraction |
+| Silt % | Silt fraction |
+| OrgC % | Organic carbon content |
+| BD | Bulk density (g/cm³) |
+| CEC | Cation exchange capacity (required for Tomasella-Hodnett) |
+| pH | Soil pH (required for Tomasella-Hodnett) |
+| K(FC) | Critical K defining field capacity (cm/day) |
+| Ksat own | Your own saturated conductivity estimate |
+
+**Method selection:**
+- Method 1: **Wosten** (temperate soils) — also uses Median Sand Particle Size
+- Method 2: **Tomasella-Hodnett** (tropical soils) — also uses CEC and pH per layer
+
+**"Use the PTF estimate of Ksat?"**
+- **Yes** → apply the Ksat calculated from your soil texture
+- **No** → apply your own value from the "Ksat own" column
+
+Figure 3.18: Pedotransfer results and retention curves
+![Pedotransfer results](./manual_images/pedotransfer_results.png)
+
+Results show per-layer Theta_sat, Ksat_used (the value actually applied), Alpha, n, Theta_res, and Field Capacity, with water retention curves plotted per layer.
+
+#### Soil Water > Water Retention Data
+
+Figure 3.19: Water retention data
+![Water retention](./manual_images/water_retention.png)
+
+View and edit the van Genuchten water retention curve parameters per layer.
+
+---
+
+## 4. Additional Parameters
+
+Additional Parameters are **optional**. They contain advanced settings that most users won't need to change unless they have a specific purpose for the model, such as detailed management scheduling or economic analysis. They are organized into four groups.
+
+### 4.1 Tree (Advanced)
+
+Figure 4.1: Advanced Tree Parameters
+![Advanced Tree Parameters](./manual_images/advanced_tree_params.png)
+
+Fine-tune tree-specific physiological starting conditions and internal processes beyond what is set in the Tree Library:
+
+- **Initial biomass and height** — Starting above- and below-ground biomass, initial stem diameter, and canopy height for each selected tree species at the start of the simulation.
+- **Tree leaf phenology** — Timing and pattern of leaf flushing, seasonal leaf shedding, and deciduousness, which affects light interception and photosynthesis over time.
+- **Tree stem (SapWood and HeartWood)** — Parameters controlling how much of the stem is active sapwood versus heartwood, which affects water transport capacity and wood biomass accounting.
+- **Tree transpiration** — Advanced parameters governing how trees respond to water availability and atmospheric demand during transpiration.
+
+### 4.2 Economy
+
+Figure 4.2: Profitability and price table
 ![Profitability](./manual_images/profitability.png)
-*Economics Details - Profitability. Set assumptions on market prices, material input costs, and labor requirements. The profitability module calculates the Net Present Value (NPV) and returns to labor based on inputs for the whole field, trees, and crops.*
 
-Figure 3.57: Input cost
-![Input cost](./manual_images/input_cost.png)
-*Economics Details - Input cost. Set assumptions on market prices, material input costs, and labor requirements. The profitability module calculates the Net Present Value (NPV) and returns to labor based on inputs for the whole field, trees, and crops.*
+The **Profitability** page lets you evaluate the economic performance of your agroforestry design. It features a **merged Social/Private price table** (Item | Private | Social) covering fertilizer costs (N, P), external organic inputs, herbicide, fencing, and labour costs — "Private" prices reflect what a farmer actually pays or receives, while "Social" prices reflect the wider societal value (useful for policy-level cost-benefit analysis). The module calculates the Net Present Value (NPV) and returns to labor over the simulation period, letting you compare the financial viability of different tree-crop combinations or management strategies.
 
-Figure 3.58: Labour
-![Labour](./manual_images/labour.png)
-*Economics Details - Labour. Set assumptions on market prices, material input costs, and labor requirements. The profitability module calculates the Net Present Value (NPV) and returns to labor based on inputs for the whole field, trees, and crops.*
+### 4.3 Management
 
-### 3.6. Parameter Input Types & UI Usage
-Values can be input in various ways:
-* **Numeric Values**: Simple number boxes (e.g., initial values, system limits).
-* **Data Tables**: Spreadsheets arrays (e.g., temporal rainfall data or depths) that can be edited cell-by-cell.
-* **Graphs**: Interactive plots showing responses (e.g., crop vs. light). The plot's underlying data can also be edited in table view.
+Figure 4.3: Management sub-tabs
+![Management](./manual_images/management.png)
 
-Figure 3.59: Fullscreen table
-![Fullscreen table](./manual_images/fullscreen_table.png)
-*Fullscreen Table Data Input - Fullscreen table. Expand data tables into full screen for easier bulk updates across rows and columns. This is particularly useful for grid-based temporal inputs or extensive configurations across the 4 physical soil layers and zones (e.g., initial values and depths).*
+The Management group lets you schedule specific field operations and events over the course of the simulation, each affecting biomass, nutrient, or water pools at the time they occur:
 
-Figure 3.60: Fullscreen table expand
-![Fullscreen table expand](./manual_images/fullscreen_table_expand.png)
-*Fullscreen Table Data Input - Fullscreen table expand. Expand data tables into full screen for easier bulk updates across rows and columns. This is particularly useful for grid-based temporal inputs or extensive configurations across the 4 physical soil layers and zones (e.g., initial values and depths).*
+| Sub-tab | What it controls |
+|---|---|
+| Weeding | Weeding schedule and intensity — when weeds are removed and how completely, affecting competition for light, water, and nutrients. |
+| Slash & Burn | Burning calendar, ash effects, fire impacts. WaNuLCAS simulates fire consequences: volatilizing nitrogen, heat-related mortality of weed seedbanks, and depositing mineral nutrients into topsoil. |
+| Fertilization | Timing and quantity of inorganic and organic fertilizer inputs applied to specific zones. |
+| Timber Harvesting | Wood harvest strategies, including harvest year and the fraction of tree biomass removed. |
+| Fruit Harvesting | Timing and fraction of fruit harvested for fruit-bearing tree species. |
+| Latex Production | Rubber tapping parameters, including tapping frequency and latex yield per tap. |
+| Prunning Event | Pruning schedule and intensity per tree species (also accessible via the "Go to Pruning Event" button on the Tree Management page). |
+| Grazing | Animal stocking rates, daily feed demand, and standard livestock units for systems that include grazing. |
+| Soil Tillage | Tillage schedule and its effect on soil structure and organic matter turnover. |
+| Pest & Diseases | Timing and severity of pest or disease impacts on crop and tree growth. |
+| Killing Trees | Schedule for tree removal (e.g., thinning or clear-felling) during the simulation. |
 
-Figure 3.61: Fullscreen graph
-![Fullscreen graph](./manual_images/fullscreen_graph.png)
-*Fullscreen Graph Data Input - Fullscreen graph. Examine plotted parameter dynamics closely and adjust underlying data directly when expanding graph inputs. The integrated graphical tools allow users to alter trajectories visually or tabularly, which instantly recalibrates the numeric data driving those model equations.*
+### 4.4 Soil (Advanced)
 
-Figure 3.62: Graph data input expand
-![Graph data input expand](./manual_images/graph_data_input_expand.png)
-*Fullscreen Graph Data Input - Graph data input expand. Examine plotted parameter dynamics closely and adjust underlying data directly when expanding graph inputs. The integrated graphical tools allow users to alter trajectories visually or tabularly, which instantly recalibrates the numeric data driving those model equations.*
+Figure 4.4: Advanced soil parameters sub-tabs
+![Advanced soil](./manual_images/advanced_soil.png)
 
-Figure 3.63: Fullscreen graph table
-![Fullscreen graph table](./manual_images/fullscreen_graph_table.png)
-*Fullscreen Graph Data Input - Fullscreen graph table. Examine plotted parameter dynamics closely and adjust underlying data directly when expanding graph inputs. The integrated graphical tools allow users to alter trajectories visually or tabularly, which instantly recalibrates the numeric data driving those model equations.*
+Advanced soil process parameters for users who want to fine-tune the underlying soil science beyond the Core Soil settings:
 
-### 3.7. Options Menu
-At the top right of the Input Parameters panel, under **Options**:
-* **Upload**: Load a `.yaml` parameter file from previous sessions.
-* **Download**: Save all current adjustments to a `.yaml` file to your computer.
+- **Sloping Land** — Surface conditions and erosion parameters for sloped terrain, affecting soil and nutrient redistribution across zones.
+- **SOM** — Soil Organic Matter dynamics based on the Century model, with separate pools for different decomposition timescales (active, slow, passive, structural, metabolic) and their transfer fractions.
+- **Litter Quality** — Properties of surface litter layers, litterfall rates, and litter quality indicators that regulate how quickly carbon and nutrients are released back into the soil.
+- **Roots & Mycorrhiza** — Root length density distribution across zones and layers, plus the fraction of root length infected by mycorrhiza, which increases effective root length for phosphorus uptake.
+- **Soil Texture** — Detailed sand/silt/clay composition per layer, used where texture-based calculations are needed beyond the Pedotransfer calculator.
+- **GHG** — Greenhouse gas emission parameters (N₂O and CH₄ fluxes) arising from soil organic matter and litter decomposition.
+- **Soil Water/Nutrient (additional)** — Supplementary water and nutrient parameters not covered in the Core Parameters, such as initial soil moisture and additional stock initialization values.
 
+---
 
-## 4. Simulation
+## 5. Simulation
 
-Once all parameters are structured, navigate to the **Simulation** tab.
+### 5.1 Configuring a Run
 
-1. **Simulation Time (days)**: Define how many days you want to run the model scenario.
-2. **Run Simulation**: Click the `Play` button to initiate the run. 
+Figure 5.1: Simulation page
+![Simulation page](./manual_images/simulation_page.png)
 
-### 4.1. Analyzing Outputs
-After a successful run, simulation results will be displayed as interactive plots or tables. You can select specific output variables to view:
-* Check out the **All Output Variables** list to find results. 
-* Your choices will move to the **Selected Variables** section. 
-* From **Options**, use "Clear selections" or "Reset to default" to filter down results.
+The left sidebar contains **scenario switches** (on/off toggles and sliders):
 
-Figure 4.1: Output var
-![Output var](./manual_images/output_var.png)
-*Output Variables Setup - Output var. Navigate the category lists to select which variables to monitor and analyze. Variables are organized by their respective modules (e.g., Tree, Crop, Soil, Environment), allowing you to pinpoint specifically which parameters like plant biomass, simulated water uptake, or nitrogen balances you want to explore.*
+| Switch | Description | Default |
+|---|---|---|
+| 🌳 Include Trees? | Enable/disable tree growth | On (1) |
+| 🌾 Include Crops? | Enable/disable crop growth | On (1) |
+| 💧 Water Limitation? | Limit growth by water availability | On (1) |
+| 🧪 N Limitation? | Limit growth by nitrogen | On (1) |
+| 🧪 P Limitation? | Limit growth by phosphorus | On (1) |
+| 🐛 Include Pests? | Enable pest/disease impacts | Off (0) |
+| 🌊 Water Logging? | Enable waterlogging effects | Off (0) |
+| 💦 Hydraulic Redistribution? | Enable hydraulic lift | Off (0) |
+| 🌧️ Rain Multiplier | Scale rainfall (0–4×) | 1 |
+| 📅 Simulation Days | Duration in days | 50 |
+| 📅 Start Day of Year | Julian day to start | 14 |
 
-Figure 4.2: Select var
-![Select var](./manual_images/select_var.png)
-*Output Variables Setup - Select var. Navigate the category lists to select which variables to monitor and analyze. Variables are organized by their respective modules (e.g., Tree, Crop, Soil, Environment), allowing you to pinpoint specifically which parameters like plant biomass, simulated water uptake, or nitrogen balances you want to explore.*
+### 5.2 Output Variable Selection
 
-Figure 4.3: Output var result
-![Output var result](./manual_images/output_var_result.png)
-*Output Results UI - Output var result. Visualize your selected variables mapped over time to analyze the system's dynamics. The results subpanels offer dynamic plots where users can track complex trajectories, such as cumulative water drained or nutrient limitations, comparing default expectations against simulated outcomes.*
+Two tables let you select which variables to track:
 
-Figure 4.4: Output graph
-![Output graph](./manual_images/output_graph.png)
-*Output Results UI - Output graph. Visualize your selected variables mapped over time to analyze the system's dynamics. The results subpanels offer dynamic plots where users can track complex trajectories, such as cumulative water drained or nutrient limitations, comparing default expectations against simulated outcomes.*
+- **Time Series Output** — Variables recorded at every timestep (for graphs)
+- **Final Output** — Variables recorded only at the end (for summary tables)
 
-Figure 4.5: Output water uptake
-![Output water uptake](./manual_images/output_water_uptake.png)
-*Output Results UI - Output water uptake. Visualize your selected variables mapped over time to analyze the system's dynamics. The results subpanels offer dynamic plots where users can track complex trajectories, such as cumulative water drained or nutrient limitations, comparing default expectations against simulated outcomes.*
+Variables are pre-checked based on the model's recommended defaults. Please click/add the parameters of your interest before running the model. The detailed description of each output abbreviation is in the output parameter description PDF, downloadable from the **Options** menu.
 
-* **Download Output**: Export the simulated tabular data into `.csv` format for external analysis.
+### 5.3 Running and Console Log
 
+Click **"Run Simulation"**. The R console prints detailed diagnostics before each run — species selections, scenario switches, soil hydraulic parameters, and output variable counts. Check this whenever results look unexpected.
 
-## 5. More Information
-In the final section (identified by the `?` icon), find further assistance:
-* **About**: General information regarding the tool authors and methodology.
-* **Tutorial** (This page): Read the instructional manual for general UI processes.
-* **References**: Academic and foundational resources tied to WaNuLCAS calculations.
-* **Software Library**: Packages powering WaNuLCAS.
+---
+
+## 6. Output & Results
+
+### 6.1 Time Series Output
+
+Figure 6.1: Output theme tabs
+![Output tabs](./manual_images/output_tabs.png)
+
+Results are grouped into **theme tabs**:
+
+| Tab | Example Variables |
+|---|---|
+| Carbon Balance | BC_SOM |
+| Nitrogen Balance | BN_CropBiom, BN_CUptTot, BN_Som |
+| Water Balance | BW_LatOutCum, BW_NetBal, BW_UptCCum, BW_UptTCum |
+| Crop Growth | C_Biom, C_BiomCan |
+| Tree Growth | T_Biom, T_BiomAG, T_CanH, T_StemDiam, ... |
+| Water | W_DrainCumV |
+| Rainfall | Rain, RAIN_Cum |
+| Economic Balance | P_TCostsTot, P_TReturnTot, P_NPV, ... |
+
+Each card shows a plotly interactive graph. You can zoom (click-drag), pan (shift-drag), reset (double-click), download (camera icon), and hover for exact values.
+
+### 6.2 Zone Display
+
+Figure 6.2: Zone colored lines in output
+![Zone lines](./manual_images/output_zone_lines.png)
+
+For variables that vary by zone (like `CW_Posgro`, `W_Stock`, `N_CUpt`), all 4 zones are displayed as **colored lines within a single graph**:
+
+| Color | Zone |
+|---|---|
+| Teal | Zone 1 |
+| Orange | Zone 2 |
+| Purple | Zone 3 |
+| Pink | Zone 4 |
+
+Figure 6.3: Zone × Layer facets
+![Zone layer](./manual_images/output_zone_layer.png)
+
+For variables that also vary by layer (like `W_Stock`), the graph shows one **facet per layer**, with 4 zone lines in each facet — so you see all zones at each depth without switching views.
+
+### 6.3 Adding Custom Pages
+
+Click **"Add New Page"** to create a custom output page where you can add cards for any available variable.
+
+### 6.4 Downloading Data
+
+Each graph card has a **Data** tab showing raw values. Use **"Download output data"** on the Simulation page to export everything.
+
+---
+
+## 7. Options
+
+Figure 7.1: Options tab
+![Options](./manual_images/options_menu.png)
+
+| Action | Description |
+|---|---|
+| **Upload input parameter file** | Import a previously saved `.yaml` parameter file |
+| **Import and apply MS-Excel parameter file** | Import parameters from a `Wanulcas.xlsm`/`.xlsx`/`.xls` file from an earlier version of WaNuLCAS |
+| **Download and save parameters** | Export current parameters as a `.yaml` file |
+| **Download xlsm template** | Download a blank `Wanulcas.xlsm` to fill in offline |
+| **Download input parameter description (PDF)** | Detailed description of every input parameter acronym used in the app |
+| **Download output parameter description (PDF)** | Detailed description of every output parameter acronym used in the app |
+
+---
+
+## 8. Frequently Asked Questions
+
+**Q: I changed a parameter but the simulation result didn't change?**
+Check the console log in RStudio. It shows the exact values the engine received. If your parameter isn't there, click "Compute & Apply" on the relevant calculator.
+
+**Q: What's the difference between Core and Additional Parameters?**
+Core = essential inputs (species, climate, soil), it must be filled for the model to run. Additional = advanced fine-tuning with sensible defaults, depending on the purpose of the research.
+
+**Q: Can I paste data from Excel?**
+Yes. Select a block in Excel, copy (Ctrl+C), click the first cell in the web table, and paste (Ctrl+V). Whole rows fill in at once.
+
+**Q: How do I know which soil temperature/evaporation and rainfall type to use?**
+There's a guide in the app. Constant = single value (simplest). Monthly = 12 measurements. Daily = 365 measurements (most detailed). The console confirms your choice.
+
+**Q: How do I compare results across zones?**
+Zone-dimensioned variables automatically show all 4 zones as colored lines in the same plot (teal/orange/purple/pink).
+
+**Q: Can I download the output data?**
+Yes. Click "Download output data" on the Simulation page.
+
+**Q: How do I import parameters from a previous study?**
+Go to Options > Upload xlsm file and select your `.xlsm` file.
 
 ---
 &copy; World Agroforestry (ICRAF)

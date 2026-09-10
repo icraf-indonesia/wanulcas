@@ -1,4 +1,4 @@
-﻿group_id,title,desc
+group_id,title,desc
 1,Sloping land system,
 2,Soil layer thickness,
 3,Uphill Neighbours & runon,Uphill neighbours as source of Lateral Inflow & Run-on

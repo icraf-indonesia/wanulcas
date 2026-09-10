@@ -101,6 +101,9 @@ source("R/wanulcas.R")
 source("R/wanulcas_lib.R")
 source("R/gui.R")
 source("R/utils.R")
+source("R/crash_guard.R")                                    # crashguard
+source("R/pedotransfer.R")                                   # pedotransfer calculation - ui
+source("R/phosphorus.R")                                     # phosporus calculation - ui
 
 
 is_run_online <- Sys.getenv('SHINY_PORT') != ""
@@ -123,6 +126,36 @@ xls_config_df <- read.csv("R/xls_param_config.csv")
 
 output_vars_disp_df <- output_vars_df
 output_vars_disp_df$arr <- sapply(output_vars_df$arr, suffix_remove)
+
+### Grouped output + auto-checklist (Phase 4) ##################
+# Curated output variables from output_vars_grouped.csv. Variables flagged
+# in the "auto" column become the default (pre-checked) output selection,
+# replacing the long hard-coded defaults from wanulcas_lib.R.
+output_grouped_df <- read.csv("config/output_vars_grouped.csv",
+                              stringsAsFactors = FALSE)
+output_grouped_df[is.na(output_grouped_df)] <- ""
+.auto_rows <- output_grouped_df[output_grouped_df$auto != "", ]
+# keep only variables the engine actually exposes
+.auto_rows <- .auto_rows[.auto_rows$var %in% output_vars_df$var, ]
+default_output_timeseries_vars <- .auto_rows$var[.auto_rows$auto %in% c("Yes", "Yes zone")]
+default_output_final_vars      <- .auto_rows$var[.auto_rows$auto == "Yes table"]
+
+# Grouped output layout: one page per Group, one graph card per variable.
+# filter = NULL makes the renderer follow the variable's array dimension:
+#   "Yes"      -> a single Overall panel
+#   "Yes zone" -> one panel per zone (automatic)
+# This drives the initial output view; users can still add/edit pages after.
+.graph_rows <- .auto_rows[.auto_rows$auto %in% c("Yes", "Yes zone") &
+                            .auto_rows$group != "", ]
+.groups <- unique(.graph_rows$group)
+grouped_output_layout <- lapply(.groups, function(g) {
+  gv <- .graph_rows$var[.graph_rows$group == g]
+  cards <- lapply(gv, function(v) list(vars = v, filter = NULL))
+  list(title = g, content = cards)
+})
+if (length(grouped_output_layout) > 0) {
+  wanulcas_params_def$output$timeseries_layout <- grouped_output_layout
+}
 
 input_gui_tabs_df[is.na(input_gui_tabs_df)] <- ""
 

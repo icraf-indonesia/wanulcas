@@ -11,7 +11,8 @@
 # https://app.soilhive.ag/availability
 
 
-#
+# last revision: 28 June 2026
+# check "#hasna revised" for script revision/addition
 
 
 options("warnPartialMatchDollar" = TRUE)
@@ -260,6 +261,10 @@ run_wanulcas <- function(n_iteration,
   
   # INIT RT_TDecDepthAct[Tree] = RT_TDecDepthC[Tree]
   tree_df["RT_TDecDepthAct"] <- tree_df[["RT_TDecDepthC"]]
+  
+  is_oilpalm <- grepl("Oil palm-Di|Oil palm-De|Elais guneensis", tree_df[["T_Species"]]) #hasna revised, add if clause for palm oil
+  cat("Tree species:", paste(tree_df[["T_Species"]], collapse=", "), "\n") #hasna revised
+  cat("is_oilpalm:", paste(is_oilpalm, collapse=", "), "\n") #hasna revised
   
   # AF_TreePosit2Q[Tree] = IF AF_TreePosit[Tree] = 2 then 1 else 0
   # AF_TreePosit3Q[Tree] = IF AF_TreePosit[Tree] = 3 then 1 else 0
@@ -5633,10 +5638,12 @@ run_wanulcas <- function(n_iteration,
     
     # TF_WatNutSuff[Tree] = TF_RecentTWPosgro[Tree]*T_NPosgro[N,Tree]*T_NPosgro[P,Tree]
     tree_df["TF_WatNutSuff"] <- tree_df[["TF_RecentTWPosgro"]] * treenut_df[treenut_df[["SlNut"]] == "N", "T_NPosgro"] * treenut_df[treenut_df[["SlNut"]] == "P", "T_NPosgro"]
+    tree_df[["TF_WatNutSuff"]][!is_oilpalm] <- 0 #hasna revised
 
     # TF_PhyllochronStressed[Tree] = TF_PhyllochronStressFac[Tree]+(1-TF_PhyllochronStressFac[Tree])*TF_WatNutSuff[Tree]
     tree_df["TF_PhyllochronStressed"] <- tree_df[["TF_PhyllochronStressFac"]] +
       (1 - tree_df[["TF_PhyllochronStressFac"]]) * tree_df[["TF_WatNutSuff"]]
+    tree_df[["TF_PhyllochronStressed"]][!is_oilpalm] <- 0 #hasna revised
     
     # Simulation_Time = TIME
     Simulation_Time <- time
@@ -5644,6 +5651,7 @@ run_wanulcas <- function(n_iteration,
     # TF_AgeofPalm[Tree] = max(0, Simulation_Time-(T_PlantTime[Tree]-1))
     tree_df["TF_AgeofPalm"] <- pmax(0, Simulation_Time - (tree_df[["T_PlantTime"]] -
                                                             1))
+    tree_df[["TF_AgeofPalm"]][!is_oilpalm] <- 0 #hasna revised
     
     # TF_PotPhyllochronTime[Tree] = GRAPH(TF_AgeofPalm[Tree])
     tree_df["TF_PotPhyllochronTime"] <- get_y(tree_df[["TF_AgeofPalm"]], "TF_PotPhyllochronTime")
@@ -5651,6 +5659,7 @@ run_wanulcas <- function(n_iteration,
     
     # TF_PhyllochronTime[Tree] = if TF_PhyllochronStressed[Tree]> 0 then TF_PotPhyllochronTime[Tree]/TF_PhyllochronStressed[Tree] else 0
     tree_df["TF_PhyllochronTime"] <- ifelse(tree_df[["TF_PhyllochronStressed"]] > 0, tree_df[["TF_PotPhyllochronTime"]] / tree_df[["TF_PhyllochronStressed"]], 0)
+    tree_df[["TF_PhyllochronTime"]][!is_oilpalm] <- 0 #hasna revised
     
     # TF_TrunkHIncr[Tree] = if (TF_CurrentLeafNo[Tree]>TF_PalmTrunkIntercept[Tree]) then TF_PalmTrunkInternode[Tree]/TF_PhyllochronTime[Tree] else 0
     tree_df["TF_TrunkHIncr"] <- ifelse(tree_df[["TF_CurrentLeafNo"]] > tree_df[["TF_PalmTrunkIntercept"]], tree_df[["TF_PalmTrunkInternode"]] / tree_df[["TF_PhyllochronTime"]], 0)
@@ -8574,7 +8583,8 @@ run_wanulcas <- function(n_iteration,
     # T_StageInc[Sp2,LeafAge] = if T_LfTwig[DW,Sp2]+T_CanBiomInc[DW,Sp2]> 0 then -T_Stage[Sp2,LeafAge]+(T_CanBiomInc[DW,Sp2]+T_LfTwig[DW,Sp2]*(T_Stage[Sp2,LeafAge]+1))/(T_LfTwig[DW,Sp2]+T_CanBiomInc[DW,Sp2]) else -T_Stage[Sp2,LeafAge]+0*(T_StageAftPrun?[Sp2,LeafAge]*T_Stage[Sp1,LeafAge]+T_DiesToday?[Sp1]+T_DOYFlwBeg[Sp1]+T_DOYFlwEnd[Sp1]+T_InitStage[Sp1]+T_PlantTime[Sp1]+T_Prun[DW,Sp1]+T_StageAftPrun[Sp1]+T_TimeGenCycle[Sp1]+T_TimeVeg[Sp1])
     # T_StageInc[Sp3,LeafAge] = if T_LfTwig[DW,Sp3]+T_CanBiomInc[DW,Sp3]> 0 then -T_Stage[Sp3,LeafAge]+(T_CanBiomInc[DW,Sp3]+T_LfTwig[DW,Sp3]*(T_Stage[Sp3,LeafAge]+1))/(T_LfTwig[DW,Sp3]+T_CanBiomInc[DW,Sp3]) else -T_Stage[Sp3,LeafAge]+0*(T_StageAftPrun?[Sp3,LeafAge]*T_Stage[Sp1,LeafAge]+T_DiesToday?[Sp1]+T_DOYFlwBeg[Sp1]+T_DOYFlwEnd[Sp1]+T_InitStage[Sp1]+T_PlantTime[Sp1]+T_Prun[DW,Sp1]+T_StageAftPrun[Sp1]+T_TimeGenCycle[Sp1]+T_TimeVeg[Sp1])
     treestage_df["T_StageInc"] <- NA
-    ts_VG <- treestage_df[treestage_df[["Tree_Stage"]] == "VegGen", c("tree_id", "T_Stage")]
+    #ts_VG <- treestage_df[treestage_df[["Tree_Stage"]] == "VegGen", c("tree_id", "T_Stage")] #hasna revised
+    ts_VG <- treestage_df[treestage_df[["Tree_Stage"]] == "VegGen", c("tree_id", "T_Stage", "T_StageAftPrun_is")] #hasna revised, add T_StageAftPrun
     treestage_df[treestage_df[["Tree_Stage"]] == "VegGen", "T_StageInc"] <- ifelse(tree_df[["T_DiesToday_is"]] == 1,
                                                                                    -ts_VG[["T_Stage"]],
                                                                                    ifelse(
@@ -9359,9 +9369,9 @@ run_wanulcas <- function(n_iteration,
       zonenut_df[["MN_MinNutpool"]],
       pmax(0, zonenut_df[["MN_DemActMet"]] - zonenut_df[["MN_DecActMet"]]) +
         pmax(0, zonenut_df[["MN_DemActSt"]] -
-               zonenut_df[["MN_DecActSt"]]) + pmax(0, zonenut_df[["MN_Act"]] * zonenut_df[["MN_CNActAct"]] * (
+               zonenut_df[["MN_DecActSt"]]) + pmax(0, ifelse(zonenut_df[["MN_CNActAct"]] == 0, 0, zonenut_df[["MN_Act"]] * zonenut_df[["MN_CNActAct"]] * ( #hasna revised — guard 1/0
                  1 / (MN_CNAct * zonenut_df[["MN_NutRatAct"]]) - 1 / zonenut_df[["MN_CNActAct"]]
-               ))
+               )))
     )
     
     # MN_ActMinF[Zone,SlNut] = IF (MN_ActMin[Zone,SlNut]+S&B_SurfLitBurnFrac[Zone]*MN_Act[Zone,SlNut]-MN_ImmobAct[Zone,SlNut])>0 THEN MIN((MN_ActMin[Zone,SlNut]+S&B_SurfLitBurnFrac[Zone]*MN_Act[Zone,SlNut]-MN_ImmobAct[Zone,SlNut]),MN_ActMin[Zone,SlNut]) ELSE IF (MN_ActMin[Zone,SlNut]+S&B_SurfLitBurnFrac[Zone]*MN_Act[Zone,SlNut]-MN_ImmobAct[Zone,SlNut])=0 THEN 0 ELSE -MIN(ABS(MN_ActMin[Zone,SlNut]+S&B_SurfLitBurnFrac[Zone]*MN_Act[Zone,SlNut]-MN_ImmobAct[Zone,SlNut]),MN_MinNutpool[Zone,SlNut]-MN_Mineralization[Zone,SlNut])
@@ -9414,9 +9424,9 @@ run_wanulcas <- function(n_iteration,
       zonenut_df[["MN_MinNutpool"]] - zonenut_df[["MN_ImmobAct"]],
       pmax(0, zonenut_df[["MN_DemStrucSlw"]] -
              zonenut_df[["MN_DecStrucSlw"]]) +
-        pmax(0, zonenut_df[["MN_Slw"]] * zonenut_df[["MN_CNSlwAct"]] * (
+        pmax(0, ifelse(zonenut_df[["MN_CNSlwAct"]] == 0, 0, zonenut_df[["MN_Slw"]] * zonenut_df[["MN_CNSlwAct"]] * ( #hasna revised — guard 1/0
           1 / (MN_CNSlw * zonenut_df[["MN_NutRatSlw"]]) - 1 / zonenut_df[["MN_CNSlwAct"]]
-        ))
+        )))
     )
     
     # MN_SlwMinF[Zone,SlNut] = IF (MN_SlwMin[Zone,SlNut]+S&B_SurfLitBurnFrac[Zone]*MN_Slw[Zone,SlNut]-MN_ImmobStrucSlw[Zone,SlNut])>0 THEN MIN( (MN_SlwMin[Zone,SlNut]+S&B_SurfLitBurnFrac[Zone]*MN_Slw[Zone,SlNut]-MN_ImmobStrucSlw[Zone,SlNut]),MN_Slw[Zone,SlNut]) ELSE IF (MN_SlwMin[Zone,SlNut]+S&B_SurfLitBurnFrac[Zone]*MN_Slw[Zone,SlNut]-MN_ImmobStrucSlw[Zone,SlNut])=0 THEN 0 ELSE MAX((MN_SlwMin[Zone,SlNut]+S&B_SurfLitBurnFrac[Zone]*MN_Slw[Zone,SlNut]-MN_ImmobStrucSlw[Zone,SlNut]),-MN_MinNutpool[Zone,SlNut])
@@ -9909,6 +9919,7 @@ run_wanulcas <- function(n_iteration,
     # TF_Full_canopy_no_of_leaves[Tree] = 40 - max(0,(min(4380,TF_AgeofPalm[Tree])-2555)/(4380-2555))*(40-30)
     tree_df["TF_Full_canopy_no_of_leaves"] <- 40 - pmax(0, (pmin(4380, tree_df[["TF_AgeofPalm"]]) -
                                                               2555) / (4380 - 2555)) * (40 - 30)
+    tree_df[["TF_Full_canopy_no_of_leaves"]][!is_oilpalm] <- 0 #hasna revised
     
     # TF_PotLeaffall[Tree] = GRAPH(TF_AgeofPalm[Tree])
     tree_df["TF_PotLeaffall"] <- get_y(tree_df[["TF_AgeofPalm"]], "TF_PotLeaffall")
@@ -9966,7 +9977,7 @@ run_wanulcas <- function(n_iteration,
               (treefruit_df[["TF_BunchGender"]] %% 2) * treefruit_df[["TF_MaleSinkperBunch"]]
           ) / treefruit_df[["TF_TotFlowerSink"]]
         ) *
-          treefruit_df[["T_GroRes_DW"]] * treefruit_df[["T_RelFruitAllocMax"]][Tree],
+          treefruit_df[["T_GroRes_DW"]] * treefruit_df[["T_RelFruitAllocMax"]], #hasna revised removed [Tree]
         0
       )
     )
@@ -10623,10 +10634,10 @@ run_wanulcas <- function(n_iteration,
       pmax(0, zonelayer_df[["MN2_DemActMet_N"]] -
              zonelayer_df[["MN2_DecActMet"]]) +
         pmax(0, zonelayer_df[["MN2_DemActSt"]] - zonelayer_df[["MN2_DecActSt_N"]]) +
-        pmax(0, zonelayer_df[["MN2_Act"]] * zonelayer_df[["MN2_CNActAct_N"]] * (
+        pmax(0, ifelse(zonelayer_df[["MN2_CNActAct_N"]] == 0, 0, zonelayer_df[["MN2_Act"]] * zonelayer_df[["MN2_CNActAct_N"]] * ( #hasna revised — guard 1/0
           1 / (MN_CNAct * nut_df[nut_df[["SlNut"]] == "N", "MN_NutRatAct"]) - 1 /
             zonelayer_df[["MN2_CNActAct_N"]]
-        ))
+        )))
     )
     
     # MN2_ActMinF[Zone,SoilLayer] = IF (MN2_ActMin[Zone,SoilLayer]-MN2_ImmobAct[Zone,SoilLayer]+MN2_MinDueToS&B[Zone,SoilLayer]*MN2_Act[Zone,SoilLayer])>0
@@ -10713,10 +10724,10 @@ run_wanulcas <- function(n_iteration,
       pmin(
         zonelayer_df[["MN_MinNutpool_N"]] - zonelayer_df[["MN2_ImmobAct"]],
         pmax(0, zonelayer_df[["MN2_DemStrucSlw"]] - zonelayer_df[["MN2_DecStrucSlw"]]) +
-          pmax(0, zonelayer_df[["MN2_Slw"]] * zonelayer_df[["MN2_CNSlwAct_N"]] * (
+          pmax(0, ifelse(zonelayer_df[["MN2_CNSlwAct_N"]] == 0, 0, zonelayer_df[["MN2_Slw"]] * zonelayer_df[["MN2_CNSlwAct_N"]] * ( #hasna revised — guard 1/0
             1 / (MN_CNSlw * nut_df[nut_df[["SlNut"]] == "N", "MN_NutRatSlw"]) - 1 /
               zonelayer_df[["MN2_CNSlwAct_N"]]
-          ))
+          )))
       )
     
     # MN2_SlwMinF[Zone,SoilLayer] = (MN2_SlwMin[Zone,SoilLayer]-MN2_ImmobStrucSlw[Zone,SoilLayer])+MN2_MinDueToS&B[Zone,SoilLayer]*MN2_Slw[Zone,SoilLayer]

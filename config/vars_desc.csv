@@ -1,4 +1,4 @@
-﻿var,label,desc,unit,min,max
+var,label,desc,unit,min,max
 AF_AnyTrees_is,Trees?,"Parameter governing an option to simulate system with trees. Value 0 means system without trees, value 1 means system with trees is possible",,,
 AF_Circ,Parkland System?,"Switch to decide on circular versus linear symmetry. 1 = circular system, 0 =linear system",,,
 AF_Crop_is,Crops?,"Parameter governing an option to simulate system with crop. Value 0 means system without crop, value 1 means system with crop",,,
@@ -594,3 +594,4 @@ W_ThetaIniti,,"Initial volumetric soil water content relative to water saturated
 W_ThetaPi,,Graphs showing relationship between pressure head in i-th soil layer of each zone and volumetric soil water content. Read and calculation from Wanulcas.xls (pedotransfer). Input needed to run pedotransfer refer to the sheet pedotransfer,cm,,
 W_ThetaPMax,,Volumetric soil water content at a given maximum soil potential at top layer. Read and calculation from Wanulcas.xls (pedotransfer). Input needed to run pedotransfer refer to the sheet pedotransfer,cm,,
 W_WaterLog_is,Water logging?,,,,
+P_CostExtOrg,Price of external organic input,"Cost of external organic inputs (ExtOrg1, ExtOrg2) per kg, per price type (social/private)",currency kg-1,0,
