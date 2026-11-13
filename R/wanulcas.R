@@ -10161,8 +10161,8 @@ run_wanulcas <- function(n_iteration,
       0,
       ifelse(
         treepcomp_df[["T_GroRes"]] > pmax(
-          treepcomp_df[["TF_FruitDemand"]] / treepcomp_df[["T_RelFruitAllocMax"]],
-          treepcomp_df[["TF_VegDemand"]] / treepcomp_df[["T_GroResFrac"]]
+          ifelse(treepcomp_df[["T_RelFruitAllocMax"]] > 0, treepcomp_df[["TF_FruitDemand"]] / treepcomp_df[["T_RelFruitAllocMax"]], 0), #fix div0: Stella returns 0 for x/0
+          ifelse(treepcomp_df[["T_GroResFrac"]] > 0, treepcomp_df[["TF_VegDemand"]] / treepcomp_df[["T_GroResFrac"]], 0)               #fix div0: Stella returns 0 for x/0
         ),
         treepcomp_df[["T_GrowResStorFrac"]] * treepcomp_df[["T_GroRes"]] -
           treepcomp_df[["T_GrowResMobFrac"]] * treepcomp_df[["T_GrowStor"]],
@@ -11903,7 +11903,7 @@ run_wanulcas <- function(n_iteration,
         zone_df[["AF_Crop_is"]] == 1 &
         zone_df[["C_PlantDiesToday_is"]] == 0 &
         zone_df[["CA_FertAmount"]] > 0,
-      P_CNuFertAppperCropSeason * zone_df[["P_CFertLab"]][Zone],
+      P_CNuFertAppperCropSeason * zone_df[["P_CFertLab"]], #fix: removed leftover Stella subscript [Zone]
       0
     )
     
