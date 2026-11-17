@@ -24,6 +24,7 @@ Authors: Meine van Noordwijk, Betha Lusiana, Ni'matul Khasanah, Rachmat Mulia, H
 6. [Output & Results](#6-output--results)
 7. [Options](#7-options)
 8. [Frequently Asked Questions](#8-frequently-asked-questions)
+
 ---
 ## 1. Getting Started
 
