@@ -9,20 +9,24 @@ Welcome to the official documentation site for WaNuLCAS 5.0. This site provides 
 
 Please explore the following sections to learn more:
 
-* **[About](https://degi.github.io/wanulcas/about/)**: General information regarding the tool authors, methodology, and the software library powering WaNuLCAS.
-* **[User Manual](https://degi.github.io/wanulcas/manual/)**: A step-by-step guide on how to navigate the WaNuLCAS interface, configure input parameters, and run model scenarios.
-* **[Background](https://degi.github.io/wanulcas/background/)**: Contextual information about agroforestry systems and the scientific principles behind the simulation.
-* **[Overview](https://degi.github.io/wanulcas/overview/)**: A detailed technical overview of the model features, including water and nutrient balances, plant growth, and soil dynamics.
-* **[Appendix](https://degi.github.io/wanulcas/appendix/)**: Supplementary data, formulas, and advanced technical details supporting the model.
+* **[About](https://icraf-indonesia.github.io/wanulcas/about/)**: General information regarding the tool authors, methodology, and the software library powering WaNuLCAS.
+* **[User Manual](https://icraf-indonesia.github.io/wanulcas/manual/)**: A step-by-step guide on how to navigate the WaNuLCAS interface, configure input parameters, and run model scenarios.
+* **[Background](https://icraf-indonesia.github.io/wanulcas/background/)**: Contextual information about agroforestry systems and the scientific principles behind the simulation.
+* **[Overview](https://icraf-indonesia.github.io/wanulcas/overview/)**: A detailed technical overview of the model features, including water and nutrient balances, plant growth, and soil dynamics.
+* **[Appendix](https://icraf-indonesia.github.io/wanulcas/appendix/)**: Supplementary data, formulas, and advanced technical details supporting the model.
 
 ## Introduction to the Application
 
 The WaNuLCAS application itself is divided into several main sections accessible via its navigation bar:
 
-- **Home**: Main landing page
-- **Input Parameters**: Define the characteristics of your system (Soil, Climate, Plants, etc.)
-- **Simulation**: Run scenarios and analyze outcomes
-- **About**: View tutorials, libraries, and references
+| Tab | Purpose |
+|-----|---------|
+| **Home** | Overview and quick navigation |
+| **Core Parameters** | Define the essential model inputs (tree, crop, climate, soil); these are mandatory |
+| **Additional Parameters** | Add advanced settings (management, economics, SOM, slash & burn, etc.) |
+| **Simulation** | Run the model and view results |
+| **About** | View tutorials, libraries, details of how the model works, and references |
+| **Options** | Upload/download input parameters, download the parameter template & descriptions |
 
 The following presentation slides provide an overview of the application:
 
