@@ -4,13 +4,9 @@ title: User Manual
 permalink: /manual/
 ---
 
-# WaNuLCAS 5.0 — User Manual
+**Water, Nutrient and Light Capture in Agroforestry Systems** - Version 5.0 Web Application
 
-**Water, Nutrient and Light Capture in Agroforestry Systems**
-
-Version 5.0 Web Application
-
-Authors: Meine van Noordwijk, Betha Lusiana, Ni'matul Khasanah, Rachmat Mulia, Hasna Afifah, Degi Harja Asmara
+Authors: Meine van Noordwijk, Betha Lusiana, Ni'matul Khasanah, Rachmat Mulia, Degi Harja Asmara, Hasna Afifah
 
 ---
 
