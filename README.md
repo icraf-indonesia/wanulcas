@@ -29,8 +29,9 @@ If you prefer to have the source code on your machine:
 3. Open `app.R` (or `ui.R`/`server.R`) and click **Run App** in RStudio, or run `shiny::runApp()` in your R console.
 
 ## User Manual
-In the meantime, the user manual and model documentation are available at: https://icraf-indonesia.github.io/wanulcas/ 
-The updated tutorial can be find directly inside the Application -> Overview -> Tutorial
+The user manual and model documentation are available at: https://icraf-indonesia.github.io/wanulcas/ 
+
+The updated tutorial can also be found directly inside the Application -> Overview -> Tutorial
 
 WaNuLCAS simulates the balance of water, nutrients, and light capture in agroforestry systems dynamically over time. The application is divided into several main sections accessible via the navigation bar:
 - **Home**: Main landing page and quick navigation
